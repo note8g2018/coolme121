@@ -21,12 +21,10 @@ class Register extends StatefulWidget
 class _RegisterState extends State<Register> with TickerProviderStateMixin
 {
   AnimationController _controllerTranslate;
-  AnimationController _controllerTranslate2;
   AnimationController _controllerOthers;
   Animation<double> _animationSkew;
   Animation<double> _animationScale;
   Animation<double> _animationTranslate;
-  Animation<double> _animationTranslate2;
 
   @override
   void initState() {
@@ -34,11 +32,6 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
     super.initState();
 
     _controllerTranslate = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 2,),
-    );
-
-    _controllerTranslate2 = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2,),
     );
@@ -54,7 +47,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
     ).animate(
       CurvedAnimation(
       parent: _controllerOthers,
-      curve: Interval(0.0, 1.0, curve: Curves.linear),
+      curve: Interval(0.0, 1.0, curve: Curves.bounceInOut),
       ),
     );
 
@@ -64,7 +57,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
     ).animate(
       CurvedAnimation(
           parent: _controllerOthers,
-          curve: Interval(0.0, 1.0, curve: Curves.linear),
+          curve: Interval(0.0, 1.0, curve: Curves.easeInOutBack),
       ),
     );
 
@@ -75,16 +68,6 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
       CurvedAnimation(
       parent: _controllerTranslate,
       curve: Interval(0.0, 1.0, curve: Curves.linear),
-      ),
-    );
-
-    _animationTranslate2 = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _controllerTranslate,
-        curve: Interval(0.0, 1.0, curve: Curves.linear),
       ),
     );
 
@@ -140,7 +123,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
                       ).animate(
                         CurvedAnimation(
                           parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.linear),
+                          curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
                         ),
                       );
 
@@ -175,61 +158,61 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
                 left: width2,
                 width: width2,
                 child: AnimatedBuilder(
-                  child: EmailContainer(
-                    onPressedNext: (){
-                      //_controllerTranslate.stop();
-                      _controllerTranslate.reset();
-                      _animationTranslate = Tween<double>(
-                        begin: 1.0,
-                        end: 2.0,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.linear),
-                        ),
-                      );
+                  child: AnimatedBuilder(
+                    child: EmailContainer(
+                      onPressedNext: (){
+//_controllerTranslate.stop();
+                        _controllerTranslate.reset();
+                        _animationTranslate = Tween<double>(
+                          begin: 1.0,
+                          end: 2.0,
+                        ).animate(
+                          CurvedAnimation(
+                            parent: _controllerTranslate,
+                            curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
+                          ),
+                        );
 
-                      _controllerOthers.forward().whenComplete(
-                              () => _controllerTranslate.forward()
-                              .whenComplete(() => _controllerOthers.reverse())
-                      );
-                    },
-                    onPressedBack: (){
+                        _controllerOthers.forward().whenComplete(
+                                () => _controllerTranslate.forward()
+                                .whenComplete(() => _controllerOthers.reverse())
+                        );
+                      },
+                      onPressedBack: (){
 
-                      _controllerTranslate.reset();
-                      _animationTranslate = Tween<double>(
-                        begin: 1.0,
-                        end: 0.0,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.linear),
-                        ),
-                      );
+                        _controllerTranslate.reset();
+                        _animationTranslate = Tween<double>(
+                          begin: 1.0,
+                          end: 0.0,
+                        ).animate(
+                          CurvedAnimation(
+                            parent: _controllerTranslate,
+                            curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
+                          ),
+                        );
 
-                      _controllerOthers.forward().whenComplete(
-                              () => _controllerTranslate.forward()
-                              .whenComplete(() => _controllerOthers.reverse())
+                        _controllerOthers.forward().whenComplete(
+                                () => _controllerTranslate.forward()
+                                .whenComplete(() => _controllerOthers.reverse())
+                        );
+                      },
+                    ),
+                    animation: _controllerTranslate,
+                    builder: (BuildContext context, Widget child)
+                    {
+                      return Transform(
+                        alignment: Alignment.center,
+                        child: child,
+                        transform: Matrix4.skewX(_animationSkew.value)
+                          ..scale(_animationScale.value)
+                          ..translate(width2 * -_animationTranslate.value),
                       );
                     },
                   ),
                   animation: _controllerOthers,
                   builder: (BuildContext context, Widget child)
                   {
-                    return AnimatedBuilder(
-                      child: child,
-                      animation: _controllerTranslate,
-                      builder: (BuildContext context, Widget child)
-                      {
-                        return Transform(
-                          alignment: Alignment.center,
-                          child: child,
-                          transform: Matrix4.skewX(_animationSkew.value)
-                            ..scale(_animationScale.value)
-                            ..translate(width2 * -_animationTranslate.value),
-                        );
-                      },
-                    );
+                    return child;
                   },
                 ),
               ),
@@ -248,7 +231,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
                       ).animate(
                         CurvedAnimation(
                           parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.linear),
+                          curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
                         ),
                       );
 
@@ -266,7 +249,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
                       ).animate(
                         CurvedAnimation(
                           parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.linear),
+                          curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
                         ),
                       );
 
@@ -314,7 +297,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
                       ).animate(
                         CurvedAnimation(
                           parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.linear),
+                          curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
                         ),
                       );
 
@@ -351,3 +334,5 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
     );
   }
 }
+
+

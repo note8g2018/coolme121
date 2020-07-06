@@ -1,3 +1,4 @@
+import 'package:coolme121/screen/WritingArticle_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:coolme121/screen/LogIn_screen.dart';
 import 'package:flutter/services.dart';
@@ -35,11 +36,12 @@ class MyApp extends StatelessWidget
         ),
 
         title: 'CoolME',
-        initialRoute: LogIn.route,
+        initialRoute: WritingArticle.route,
         routes:
         {
           LogIn.route: (context) => LogIn(),
           Register.route: (context) => Register(),
+          WritingArticle.route: (context) => WritingArticle(),
         },
       ),
     );
