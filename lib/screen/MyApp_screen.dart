@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:coolme121/screen/LogIn_screen.dart';
 import 'package:flutter/services.dart';
 import 'Register_screen.dart';
+import 'Wall_screen.dart';
 
 
 class MyApp extends StatelessWidget
@@ -29,19 +30,19 @@ class MyApp extends StatelessWidget
       },
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-
         themeMode: ThemeMode.dark,
         darkTheme: ThemeData(
           brightness: Brightness.dark,
         ),
 
         title: 'CoolME',
-        initialRoute: WritingArticle.route,
+        initialRoute: Wall.route,
         routes:
         {
           LogIn.route: (context) => LogIn(),
           Register.route: (context) => Register(),
           WritingArticle.route: (context) => WritingArticle(),
+          Wall.route: (context) => Wall(),
         },
       ),
     );
