@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget
         ),
 
         title: 'CoolME',
-        initialRoute: Wall.route,
+        initialRoute: Register.route,
         routes:
         {
           LogIn.route: (context) => LogIn(),
