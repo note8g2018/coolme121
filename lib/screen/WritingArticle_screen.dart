@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constant/textStyle.dart';
+import '../screen/Menu_screen.dart';
 
 class WritingArticle extends StatelessWidget
 {
@@ -23,6 +24,16 @@ class WritingArticle extends StatelessWidget
           title: Text("Writing Article",
             style: kAppBareStyle,
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: FlutterLogo(
+                //colors: Colors.indigo,
+              ),
+              onPressed: (){
+                Navigator.pushNamed(context, Menu.route);
+              },
+            ),
+          ],
         ),
         body: SafeArea(
           child: Column(

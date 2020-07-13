@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import '../screen/Menu_screen.dart';
 import 'package:vector_math/vector_math.dart' as math3;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -72,6 +72,16 @@ class _WallState extends State<Wall>
             "Wall",
             style: kAppBareStyle,
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: FlutterLogo(
+                //colors: Colors.indigo,
+              ),
+              onPressed: (){
+                Navigator.pushNamed(context, Menu.route);
+              },
+            ),
+          ],
         ),
         body: SafeArea(
           child: Container(

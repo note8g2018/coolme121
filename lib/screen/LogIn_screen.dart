@@ -1,5 +1,4 @@
-import 'package:coolme121/screen/Register_screen.dart';
-import 'package:flutter/cupertino.dart';
+import '../screen/Register_screen.dart';
 import 'package:flutter/services.dart';
 import '../constant/textStyle.dart';
 import 'package:flutter/material.dart';
