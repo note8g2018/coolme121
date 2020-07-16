@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../constant/textStyle.dart';
 import '../screen/Menu_screen.dart';
 
-class WritingArticle extends StatelessWidget
+class MyFriends extends StatelessWidget
 {
-  static String route = 'WritingArticle';
+  static String route = 'MyFriends';
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class WritingArticle extends StatelessWidget
         //resizeToAvoidBottomPadding: true,
         //resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: Text("Writing Article",
+          title: Text("My Friends",
             style: kAppBareStyle.copyWith(fontSize: 25,),
           ),
           actions: <Widget>[
@@ -52,7 +52,7 @@ class WritingArticle extends StatelessWidget
                     color: Colors.lightBlue,
                   ),
                   decoration: InputDecoration(
-                    labelText: "Title",
+                    labelText: "Search by Name",
                     labelStyle: TextStyle(
                       color: Colors.greenAccent,
                       fontSize: 25.0,
@@ -76,52 +76,7 @@ class WritingArticle extends StatelessWidget
                     right: 10.0,
                     bottom: 0.0,
                   ),
-                  child: TextFormField(
-                    scrollPadding: EdgeInsets.zero,
-                    textAlignVertical: TextAlignVertical.top,
-                    keyboardType: TextInputType.multiline,
-                    textInputAction: TextInputAction.newline,
-                    maxLines: null,
-                    minLines: null,
-                    maxLengthEnforced: true,
-                    expands: true,
-                    style: GoogleFonts.openSans(
-                      fontSize: 25.0,
-                      color: Colors.purpleAccent,
-                    ),
-                    decoration: InputDecoration(
-                      alignLabelWithHint: true,
-                      labelText: "The Article",
-                      labelStyle: TextStyle(
-                        color: Colors.greenAccent,
-                        fontSize: 25.0,
-                      ),
-                      border: OutlineInputBorder(),
-                      enabledBorder: const OutlineInputBorder(
-                        // width: 0.0 produces a thin "hairline" border
-                        borderSide: const BorderSide(color: Colors.orange, width: 0.0),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.zero,
-                padding: EdgeInsets.zero,
-                child: FlatButton(
-                  onPressed: (){},
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  padding: EdgeInsets.all(0.0),
-                  color: Colors.green,
-                  child: Text(
-                    "Send",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.pangolin(
-                      fontSize: 25.0,
-                      //height: 2.0,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
+                  child: ListView(),
                 ),
               ),
             ],

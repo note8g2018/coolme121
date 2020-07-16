@@ -1,10 +1,12 @@
-import 'package:coolme121/screen/WritingArticle_screen.dart';
+import '../screen/WritingArticle_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:coolme121/screen/LogIn_screen.dart';
+import '../screen/LogIn_screen.dart';
 import 'package:flutter/services.dart';
-import 'Menu_screen.dart';
-import 'Register_screen.dart';
-import 'Wall_screen.dart';
+import '../screen/Menu_screen.dart';
+import '../screen/Register_screen.dart';
+import '../screen/Wall_screen.dart';
+import '../screen/AddFriend_screen.dart';
+import '../screen/MyFriends_screen.dart';
 
 
 class MyApp extends StatelessWidget
@@ -37,7 +39,7 @@ class MyApp extends StatelessWidget
         ),
 
         title: 'CoolME',
-        initialRoute: Menu.route,
+        initialRoute: Register.route,
         routes:
         {
           LogIn.route: (context) => LogIn(),
@@ -45,6 +47,8 @@ class MyApp extends StatelessWidget
           WritingArticle.route: (context) => WritingArticle(),
           Wall.route: (context) => Wall(),
           Menu.route: (context) => Menu(),
+          AddFriend.route: (context) => AddFriend(),
+          MyFriends.route: (context) => MyFriends(),
         },
       ),
     );

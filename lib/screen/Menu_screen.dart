@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
-import 'package:coolme121/screen/Wall_screen.dart';
-
+import '../screen/AddFriend_screen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:image_cropper/image_cropper.dart';
+import '../screen/Wall_screen.dart';
 import '../screen/WritingArticle_screen.dart';
 import '../screen/Register_screen.dart';
 import 'package:flutter/services.dart';
@@ -8,10 +11,52 @@ import '../constant/textStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widget/LinkBall_widget.dart';
+import 'package:image_picker/image_picker.dart';
+import '../screen/MyFriends_screen.dart';
 
-class Menu extends StatelessWidget
+class Menu extends StatefulWidget
 {
   static const String route = 'Menu';
+
+  @override
+  _MenuState createState() => _MenuState();
+}
+
+class _MenuState extends State<Menu> {
+  File _imageFile;
+  final ImagePicker _picker = ImagePicker();
+
+  void _getImage() async
+  {
+    PickedFile _pickedFile = await _picker.getImage(source: ImageSource.camera);
+    File _croppedFileImage = await ImageCropper.cropImage(
+      sourcePath: _pickedFile.path,
+      cropStyle: CropStyle.circle,
+      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0,)
+    );
+
+    setState(() {
+      _imageFile = _croppedFileImage;
+    });
+  }
+
+  ImageProvider _getImageWidget(File imageFile)
+  {
+    if(imageFile == null)
+      {
+        return AssetImage("images/image18.jpg",
+          //height: 200.0,
+          //width: 200.0,
+        );
+      }
+    else
+      {
+        return FileImage(_imageFile,
+          //height: 200.0,
+          //width: 200.0,
+        );
+      }
+  }
 
   @override
   Widget build(BuildContext context)
@@ -38,13 +83,11 @@ class Menu extends StatelessWidget
               Center(
               child: GestureDetector(
                 onTap: (){
-                  print("me");
+                  _getImage();
                 },
-                child: ClipOval(
-                    child: Image.asset("images/image18.jpg",
-                      //width: 100.0,
-                      height: 200.0,
-                    ),
+                child: CircleAvatar(
+                  radius: 100.0,
+                  backgroundImage: _getImageWidget(_imageFile),
                 ),
               ),
                 ),
@@ -73,11 +116,15 @@ class Menu extends StatelessWidget
                     ),
                     LinkBall(
                       title: "My Friends",
-                      onTap: (){},
+                      onTap: (){
+                        Navigator.pushNamed(context, MyFriends.route);
+                      },
                     ),
                     LinkBall(
                       title: "Add Friend",
-                      onTap: (){},
+                      onTap: (){
+                        Navigator.pushNamed(context, AddFriend.route);
+                      },
                     ),
                     LinkBall(
                       title: "Log Out",

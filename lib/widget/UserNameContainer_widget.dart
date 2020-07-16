@@ -7,7 +7,8 @@ import 'package:flutter/services.dart';
 class UserNameContainer extends StatelessWidget {
 
   final Function onPressed;
-  const UserNameContainer({this.onPressed});
+  final TextEditingController textEditingController;
+  const UserNameContainer({this.onPressed, this.textEditingController});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +29,9 @@ class UserNameContainer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.only(top: 15.0,),
         shrinkWrap: true,
-        //crossAxisAlignment: CrossAxisAlignment.start,
-        //mainAxisAlignment: MainAxisAlignment.start,
-        //mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           TextFormField(
+            controller: textEditingController,
             inputFormatters: [
               WhitelistingTextInputFormatter(RegExp('[0-9a-z]')),
               LengthLimitingTextInputFormatter(28),

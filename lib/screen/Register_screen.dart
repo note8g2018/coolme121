@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../constant/textStyle.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:coolme121/constant/RegWidgets.dart';
+import '../controller/CheckUserName_controller.dart';
+import '../action/Validate_action.dart';
+import '../model/TravelMessage_model.dart';
 
 class Register extends StatefulWidget
 {
@@ -25,11 +27,70 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
   Animation<double> _animationSkew;
   Animation<double> _animationScale;
   Animation<double> _animationTranslate;
+  String _userName;
+  String _emil;
+  String _passWord1;
+  String _passWord2;
+  TextEditingController _userNameController;
+  TextEditingController _emailController;
+  TextEditingController _passWord1Controller;
+  TextEditingController _passWord2Controller;
+  //String _result;
+
+  void _showSnackBar(String text, BuildContext context)
+  {
+    final SnackBar mySnackBar = SnackBar(
+      content: Text(
+        text,
+        style: GoogleFonts.roboto(
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+          fontSize: 20.0,
+        ),
+      ),
+      backgroundColor: Color.fromRGBO(255, 0, 0, 1.0),
+      duration: Duration(seconds: 10,),
+      elevation: 7.0,
+    );
+
+    Scaffold.of(context).showSnackBar(mySnackBar);
+  }
+
+  Future<bool> _checkUserName(BuildContext context) async
+  {
+    _userName = _userNameController.value.text.trim();
+    if(!ValidateDate.userName(_userName))
+      {
+        const String text = "The User Name is not Valid, please read rules carefully!!!";
+        _showSnackBar(text, context);
+        return false;
+      }
+    final Map<String, dynamic> jsonOdj = {
+      "userName": _userName,
+      "result": null,
+    };
+    TravelMessage travelMessage = await Reg.CheckUserName(jsonObj: jsonOdj);
+    if(!travelMessage.result)
+      {
+        _showSnackBar(travelMessage.description, context);
+        return false;
+      }else
+        {
+          return true;
+        }
+  }
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    //_result = "";
+    _userNameController = TextEditingController();
+    _emailController = TextEditingController();
+    _passWord1Controller = TextEditingController();
+    _passWord2Controller = TextEditingController();
 
     _controllerTranslate = AnimationController(
       vsync: this,
@@ -78,6 +139,10 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
     // TODO: implement dispose
     _controllerTranslate.dispose();
     _controllerOthers.dispose();
+    _userNameController.dispose();
+    _emailController.dispose();
+    _passWord1Controller.dispose();
+    _passWord2Controller.dispose();
     super.dispose();
   }
   
@@ -98,103 +163,169 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         resizeToAvoidBottomPadding: true,
-
-        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: Text("Register",
             style: kAppBareStyle,
           ),
         ),
-        body: SafeArea(
-          child: Stack(
-            children: <Widget>[
-              Positioned(
-                top: 0.0,
-                left: 0.0,
-                width: width2,
-                child: AnimatedBuilder(
-                  animation: _controllerOthers,
-                  child: UserNameContainer(
-                    onPressed: (){
-                      _controllerTranslate.reset();
-                      _animationTranslate = Tween<double>(
-                        begin: 0.0,
-                        end: 1.0,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
-                        ),
-                      );
+        body: Builder(
+          builder: (context) => SafeArea(
+            child: Stack(
+              children: <Widget>[
+                Positioned(
+                  top: 0.0,
+                  left: 0.0,
+                  width: width2,
+                  child: AnimatedBuilder(
+                    animation: _controllerOthers,
+                    child: UserNameContainer(
+                      textEditingController: _userNameController,
+                      onPressed: () async {
+                        if(await _checkUserName(context))
+                          {
+                            _controllerTranslate.reset();
+                            _animationTranslate = Tween<double>(
+                              begin: 0.0,
+                              end: 1.0,
+                            ).animate(
+                              CurvedAnimation(
+                                parent: _controllerTranslate,
+                                curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
+                              ),
+                            );
 
-                      _controllerOthers.forward().whenComplete(
-                              () => _controllerTranslate.forward()
-                                  .whenComplete(() => _controllerOthers.reverse())
+                            _controllerOthers.forward().whenComplete(
+                                    () => _controllerTranslate.forward()
+                                    .whenComplete(() => _controllerOthers.reverse())
+                            );
+                          }
+                      },
+                    ),
+                    builder: (BuildContext context, Widget child)
+                    {
+                      return AnimatedBuilder(
+                        child: child,
+                        animation: _controllerTranslate,
+                        builder: (BuildContext context, Widget child)
+                        {
+                          return Transform(
+                            child: child,
+                            alignment: Alignment.center,
+                            transform: Matrix4.skewX(_animationSkew.value)
+                              ..scale(_animationScale.value)
+                              ..translate(width2 * -_animationTranslate.value),
+                          );
+                        },
                       );
-                      
-                    }),
-                  builder: (BuildContext context, Widget child)
-                  {
-                    return AnimatedBuilder(
-                      child: child,
-                      animation: _controllerTranslate,
-                      builder: (BuildContext context, Widget child)
-                      {
-                        return Transform(
-                          child: child,
-                          alignment: Alignment.center,
-                          transform: Matrix4.skewX(_animationSkew.value)
-                            ..scale(_animationScale.value)
-                            ..translate(width2 * -_animationTranslate.value),
+                    },
+                    ),
+
+                ),
+                Positioned(
+                  top: 0.0,
+                  left: width2,
+                  width: width2,
+                  child: AnimatedBuilder(
+                    child: EmailContainer(
+                      onPressedNext: (){
+                        _controllerTranslate.reset();
+                        _animationTranslate = Tween<double>(
+                          begin: 1.0,
+                          end: 2.0,
+                        ).animate(
+                          CurvedAnimation(
+                            parent: _controllerTranslate,
+                            curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
+                          ),
+                        );
+
+                        _controllerOthers.forward().whenComplete(
+                                () => _controllerTranslate.forward()
+                                .whenComplete(() => _controllerOthers.reverse())
                         );
                       },
-                    );
-                  },
+                      onPressedBack: (){
+
+                        _controllerTranslate.reset();
+                        _animationTranslate = Tween<double>(
+                          begin: 1.0,
+                          end: 0.0,
+                        ).animate(
+                          CurvedAnimation(
+                            parent: _controllerTranslate,
+                            curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
+                          ),
+                        );
+
+                        _controllerOthers.forward().whenComplete(
+                                () => _controllerTranslate.forward()
+                                .whenComplete(() => _controllerOthers.reverse())
+                        );
+                      },
+                    ),
+                      animation: _controllerOthers,
+                      builder: (BuildContext context, Widget child)
+                      {
+                        return AnimatedBuilder(
+                          child: child,
+                          animation: _controllerTranslate,
+                          builder: (BuildContext context, Widget child)
+                          {
+                            return Transform(
+                              alignment: Alignment.center,
+                              child: child,
+                              transform: Matrix4.skewX(_animationSkew.value)
+                                ..scale(_animationScale.value)
+                                ..translate(width2 * -_animationTranslate.value),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
+                Positioned(
+                  top: 0.0,
+                  left: (2*width2),
+                  width: width2,
+                  child: AnimatedBuilder(
+                    child: Password1Container(
+                      onPressedNext: (){
 
-              ),
-              Positioned(
-                top: 0.0,
-                left: width2,
-                width: width2,
-                child: AnimatedBuilder(
-                  child: EmailContainer(
-                    onPressedNext: (){
-                      _controllerTranslate.reset();
-                      _animationTranslate = Tween<double>(
-                        begin: 1.0,
-                        end: 2.0,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
-                        ),
-                      );
+                        _controllerTranslate.reset();
+                        _animationTranslate = Tween<double>(
+                          begin: 2.0,
+                          end: 3.0,
+                        ).animate(
+                          CurvedAnimation(
+                            parent: _controllerTranslate,
+                            curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
+                          ),
+                        );
 
-                      _controllerOthers.forward().whenComplete(
-                              () => _controllerTranslate.forward()
-                              .whenComplete(() => _controllerOthers.reverse())
-                      );
-                    },
-                    onPressedBack: (){
+                        _controllerOthers.forward().whenComplete(
+                                () => _controllerTranslate.forward()
+                                .whenComplete(() => _controllerOthers.reverse())
+                        );
+                      },
+                      onPressedBack: (){
 
-                      _controllerTranslate.reset();
-                      _animationTranslate = Tween<double>(
-                        begin: 1.0,
-                        end: 0.0,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
-                        ),
-                      );
+                        _controllerTranslate.reset();
+                        _animationTranslate = Tween<double>(
+                          begin: 2.0,
+                          end: 1.0,
+                        ).animate(
+                          CurvedAnimation(
+                            parent: _controllerTranslate,
+                            curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
+                          ),
+                        );
 
-                      _controllerOthers.forward().whenComplete(
-                              () => _controllerTranslate.forward()
-                              .whenComplete(() => _controllerOthers.reverse())
-                      );
-                    },
-                  ),
+                        _controllerOthers.forward().whenComplete(
+                                () => _controllerTranslate.forward()
+                                .whenComplete(() => _controllerOthers.reverse())
+                        );
+                      },
+                    ),
                     animation: _controllerOthers,
                     builder: (BuildContext context, Widget child)
                     {
@@ -215,118 +346,56 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
                     },
                   ),
                 ),
-              Positioned(
-                top: 0.0,
-                left: (2*width2),
-                width: width2,
-                child: AnimatedBuilder(
-                  child: Password1Container(
-                    onPressedNext: (){
+                Positioned(
+                  top: 0.0,
+                  left: 3*width2,
+                  width: width2,
+                  child: AnimatedBuilder(
+                    child: Password2Container(
+                      onRegister: (){
 
-                      _controllerTranslate.reset();
-                      _animationTranslate = Tween<double>(
-                        begin: 2.0,
-                        end: 3.0,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
-                        ),
-                      );
+                      },
+                      onPressedBack: (){
 
-                      _controllerOthers.forward().whenComplete(
-                              () => _controllerTranslate.forward()
-                              .whenComplete(() => _controllerOthers.reverse())
-                      );
-                    },
-                    onPressedBack: (){
+                        _controllerTranslate.reset();
+                        _animationTranslate = Tween<double>(
+                          begin: 3.0,
+                          end: 2.0,
+                        ).animate(
+                          CurvedAnimation(
+                            parent: _controllerTranslate,
+                            curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
+                          ),
+                        );
 
-                      _controllerTranslate.reset();
-                      _animationTranslate = Tween<double>(
-                        begin: 2.0,
-                        end: 1.0,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
-                        ),
-                      );
-
-                      _controllerOthers.forward().whenComplete(
-                              () => _controllerTranslate.forward()
-                              .whenComplete(() => _controllerOthers.reverse())
+                        _controllerOthers.forward().whenComplete(
+                                () => _controllerTranslate.forward()
+                                .whenComplete(() => _controllerOthers.reverse())
+                        );
+                      },
+                    ),
+                    animation: _controllerOthers,
+                    builder: (BuildContext context, Widget child)
+                    {
+                      return AnimatedBuilder(
+                        child: child,
+                        animation: _controllerTranslate,
+                        builder: (BuildContext context, Widget child)
+                        {
+                          return Transform(
+                            alignment: Alignment.center,
+                            child: child,
+                            transform: Matrix4.skewX(_animationSkew.value)
+                              ..scale(_animationScale.value)
+                              ..translate(width2 * -_animationTranslate.value),
+                          );
+                        },
                       );
                     },
                   ),
-                  animation: _controllerOthers,
-                  builder: (BuildContext context, Widget child)
-                  {
-                    return AnimatedBuilder(
-                      child: child,
-                      animation: _controllerTranslate,
-                      builder: (BuildContext context, Widget child)
-                      {
-                        return Transform(
-                          alignment: Alignment.center,
-                          child: child,
-                          transform: Matrix4.skewX(_animationSkew.value)
-                            ..scale(_animationScale.value)
-                            ..translate(width2 * -_animationTranslate.value),
-                        );
-                      },
-                    );
-                  },
                 ),
-              ),
-              Positioned(
-                top: 0.0,
-                left: 3*width2,
-                width: width2,
-                child: AnimatedBuilder(
-                  child: Password2Container(
-                    onRegister: (){
-
-                    },
-                    onPressedBack: (){
-
-                      _controllerTranslate.reset();
-                      _animationTranslate = Tween<double>(
-                        begin: 3.0,
-                        end: 2.0,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: _controllerTranslate,
-                          curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
-                        ),
-                      );
-
-                      _controllerOthers.forward().whenComplete(
-                              () => _controllerTranslate.forward()
-                              .whenComplete(() => _controllerOthers.reverse())
-                      );
-                    },
-                  ),
-                  animation: _controllerOthers,
-                  builder: (BuildContext context, Widget child)
-                  {
-                    return AnimatedBuilder(
-                      child: child,
-                      animation: _controllerTranslate,
-                      builder: (BuildContext context, Widget child)
-                      {
-                        return Transform(
-                          alignment: Alignment.center,
-                          child: child,
-                          transform: Matrix4.skewX(_animationSkew.value)
-                            ..scale(_animationScale.value)
-                            ..translate(width2 * -_animationTranslate.value),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
