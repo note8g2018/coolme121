@@ -1,14 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../constant/textStyle.dart';
-import 'package:flutter/services.dart';
+//import 'package:flutter/material.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:google_fonts/google_fonts.dart';
+//import '../constant/textStyle.dart';
+//import 'package:flutter/services.dart';
+
+import '../MyLibrary/import_file.dart';
 
 class EmailContainer extends StatelessWidget
 {
   final Function onPressedNext;
   final Function onPressedBack;
-  const EmailContainer({this.onPressedNext, this.onPressedBack});
+  final TextEditingController textEditingController;
+  const EmailContainer({this.onPressedNext, this.onPressedBack,this.textEditingController});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,7 @@ class EmailContainer extends StatelessWidget
         //mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           TextFormField(
+            controller: textEditingController,
             //focusNode: FocusNode(),
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,

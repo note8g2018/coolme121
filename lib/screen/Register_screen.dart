@@ -1,16 +1,24 @@
-import 'package:coolme121/widget/EmailContainer_widget.dart';
-import 'package:coolme121/widget/Password1Container_widget.dart';
-import 'package:coolme121/widget/Password2Container_widget.dart';
-import 'package:coolme121/widget/UserNameContainer_widget.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../constant/textStyle.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../controller/CheckUserName_controller.dart';
-import '../action/Validate_action.dart';
-import '../model/TravelMessage_model.dart';
+//import '../main.dart';
+//import '../widget/EmailContainer_widget.dart';
+//import '../widget/Password1Container_widget.dart';
+//import '../widget/Password2Container_widget.dart';
+//import '../widget/UserNameContainer_widget.dart';
+//import 'package:flutter/cupertino.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:flutter/material.dart';
+//import 'package:flutter/services.dart';
+//import '../constant/textStyle.dart';
+//import 'package:google_fonts/google_fonts.dart';
+//import '../controller/Registration_controller.dart';
+//import '../action/Validate_action.dart';
+//import '../model/TravelMessage_model.dart';
+//import '../screen/Wall_screen.dart';
+//import '../screen/Menu_screen.dart';
+//import '../model/Person_model.dart';
+//import '../controller/Login_controller.dart';
+//import 'package:hive/hive.dart';
+
+import '../MyLibrary/import_file.dart';
 
 class Register extends StatefulWidget
 {
@@ -35,7 +43,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
   TextEditingController _emailController;
   TextEditingController _passWord1Controller;
   TextEditingController _passWord2Controller;
-  //String _result;
+  Box<Person> _boxPerson = Hive.box<Person>(GlobalPersonBoxLog);
 
   void _showSnackBar(String text, BuildContext context)
   {
@@ -69,7 +77,7 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
       "userName": _userName,
       "result": null,
     };
-    TravelMessage travelMessage = await Reg.CheckUserName(jsonObj: jsonOdj);
+    TravelMessage travelMessage = await Registration.CheckUserName(jsonObj: jsonOdj);
     if(!travelMessage.result)
       {
         _showSnackBar(travelMessage.description, context);
@@ -78,6 +86,80 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
         {
           return true;
         }
+  }
+
+  Future<bool> _checkEmail(BuildContext context) async
+  {
+    _emil = _emailController.value.text.toLowerCase().trim();
+    if(!ValidateDate.email(_emil))
+    {
+      const String text = "The Email is not Valid, please read rules carefully!!!";
+      _showSnackBar(text, context);
+      return false;
+    }
+    final Map<String, dynamic> jsonOdj = {
+      "email": _emil,
+      "result": null,
+    };
+    TravelMessage travelMessage = await Registration.CheckEmail(jsonObj: jsonOdj);
+    if(!travelMessage.result)
+    {
+      _showSnackBar(travelMessage.description, context);
+      return false;
+    }else
+    {
+      return true;
+    }
+  }
+
+  bool _checkPassWord1(BuildContext context)
+  {
+    _passWord1 = _passWord1Controller.value.text.trim();
+    if(!ValidateDate.passWord1(_passWord1))
+    {
+      const String text = "This PassWord is not Valid, please read rules carefully!!!";
+      _showSnackBar(text, context);
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+  }
+
+  bool _checkPassWord2(BuildContext context)
+  {
+    _passWord2 = _passWord2Controller.value.text.trim();
+    if(!ValidateDate.passWord2(_passWord1, _passWord2))
+    {
+      const String text = "The PassWord does not match";
+      _showSnackBar(text, context);
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+  }
+
+  Future<bool> _register(BuildContext context) async
+  {
+    final Map<String, dynamic> jsonOdj = {
+      "userName": _userName,
+      "email": _emil,
+      "passWord": _passWord2,
+    };
+    TravelMessage travelMessage = await Registration.register(jsonObj: jsonOdj);
+    if(!travelMessage.result)
+    {
+      _showSnackBar(travelMessage.description, context);
+      return false;
+    }else
+    {
+      Person personAccount = await LoginController.loginPerson(jsonObj: jsonOdj);
+      _boxPerson.put(0, personAccount);
+      Navigator.pushNamed(context, Menu.route);
+    }
   }
 
 
@@ -135,8 +217,10 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
   }
 
   @override
-  void dispose() {
+  void dispose() async
+  {
     // TODO: implement dispose
+    await _boxPerson.compact();
     _controllerTranslate.dispose();
     _controllerOthers.dispose();
     _userNameController.dispose();
@@ -227,22 +311,26 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
                   width: width2,
                   child: AnimatedBuilder(
                     child: EmailContainer(
-                      onPressedNext: (){
-                        _controllerTranslate.reset();
-                        _animationTranslate = Tween<double>(
-                          begin: 1.0,
-                          end: 2.0,
-                        ).animate(
-                          CurvedAnimation(
-                            parent: _controllerTranslate,
-                            curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
-                          ),
-                        );
+                      textEditingController: _emailController,
+                      onPressedNext: () async {
+                        if(await _checkEmail(context))
+                          {
+                            _controllerTranslate.reset();
+                            _animationTranslate = Tween<double>(
+                              begin: 1.0,
+                              end: 2.0,
+                            ).animate(
+                              CurvedAnimation(
+                                parent: _controllerTranslate,
+                                curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
+                              ),
+                            );
 
-                        _controllerOthers.forward().whenComplete(
-                                () => _controllerTranslate.forward()
-                                .whenComplete(() => _controllerOthers.reverse())
-                        );
+                            _controllerOthers.forward().whenComplete(
+                                    () => _controllerTranslate.forward()
+                                    .whenComplete(() => _controllerOthers.reverse())
+                            );
+                          }
                       },
                       onPressedBack: (){
 
@@ -289,23 +377,26 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
                   width: width2,
                   child: AnimatedBuilder(
                     child: Password1Container(
+                      textEditingController: _passWord1Controller,
                       onPressedNext: (){
+                        if(_checkPassWord1(context))
+                          {
+                            _controllerTranslate.reset();
+                            _animationTranslate = Tween<double>(
+                              begin: 2.0,
+                              end: 3.0,
+                            ).animate(
+                              CurvedAnimation(
+                                parent: _controllerTranslate,
+                                curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
+                              ),
+                            );
 
-                        _controllerTranslate.reset();
-                        _animationTranslate = Tween<double>(
-                          begin: 2.0,
-                          end: 3.0,
-                        ).animate(
-                          CurvedAnimation(
-                            parent: _controllerTranslate,
-                            curve: Interval(0.0, 1.0, curve: Curves.easeInBack),
-                          ),
-                        );
-
-                        _controllerOthers.forward().whenComplete(
-                                () => _controllerTranslate.forward()
-                                .whenComplete(() => _controllerOthers.reverse())
-                        );
+                            _controllerOthers.forward().whenComplete(
+                                    () => _controllerTranslate.forward()
+                                    .whenComplete(() => _controllerOthers.reverse())
+                            );
+                          }
                       },
                       onPressedBack: (){
 
@@ -352,8 +443,12 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
                   width: width2,
                   child: AnimatedBuilder(
                     child: Password2Container(
+                      textEditingController: _passWord2Controller,
                       onRegister: (){
-
+                        if(_checkPassWord2(context))
+                          {
+                            _register(context);
+                          }
                       },
                       onPressedBack: (){
 

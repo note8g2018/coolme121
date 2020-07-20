@@ -1,14 +1,19 @@
-import 'dart:convert';
+//import 'dart:convert';
+//import 'package:flutter/cupertino.dart';
+//import '../model/Person_model.dart';
+//import 'package:dio/dio.dart' as DIO;
+//import '../model/TravelMessage_model.dart';
+
+import '../MyLibrary/import_file.dart';
 import 'package:dio/dio.dart' as DIO;
-import '../model/TravelMessage_model.dart';
 
 
-abstract class Reg
+abstract class LoginController
 {
-  static Future<TravelMessage> CheckUserName({Map<String, dynamic> jsonObj})
+  static Future<TravelMessage> login({Map<String, dynamic> jsonObj})
   async {
     TravelMessage travelMessage = TravelMessage();
-
+    //const String url = 'http://coolme.me:8888';
     const String url = 'http://192.168.1.100:8888';
     DIO.RequestOptions option = DIO.RequestOptions();
     option.responseType = DIO.ResponseType.json;
@@ -20,7 +25,7 @@ abstract class Reg
     DIO.Dio dio = DIO.Dio();
     DIO.Response response;
     try{
-      response = await dio.request("/checkusername", options: option);
+      response = await dio.request("/login", options: option);
     }catch(e)
     {
       print("error");
@@ -43,6 +48,26 @@ abstract class Reg
       travelMessage.description = "There is error with status code ${response.statusCode}";
       return travelMessage;
     }
+  }
+
+  static Future<Person> loginPerson({Map<String, dynamic> jsonObj})
+  async {
+    //const String url = 'http://coolme.me:8888';
+    const String url = 'http://192.168.1.100:8888';
+    DIO.RequestOptions option = DIO.RequestOptions();
+    option.responseType = DIO.ResponseType.json;
+//    option.connectTimeout = 5000;
+    option.baseUrl = url;
+    option.contentType = DIO.Headers.jsonContentType;
+    option.method = 'POST';
+    option.data = jsonEncode(jsonObj);
+    DIO.Dio dio = DIO.Dio();
+    DIO.Response response;
+    response = await dio.request("/loginPerson", options: option);
+    final Map<String, dynamic> data = jsonDecode(response.data);
+    final Person person = Person.fromJson(data);
+    debugPrint(person.toString());
+    return person;
   }
 
 }

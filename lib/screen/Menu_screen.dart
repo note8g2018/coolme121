@@ -1,18 +1,22 @@
-import 'dart:io';
-import 'dart:ui';
-import '../screen/AddFriend_screen.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:image_cropper/image_cropper.dart';
-import '../screen/Wall_screen.dart';
-import '../screen/WritingArticle_screen.dart';
-import '../screen/Register_screen.dart';
-import 'package:flutter/services.dart';
-import '../constant/textStyle.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../widget/LinkBall_widget.dart';
-import 'package:image_picker/image_picker.dart';
-import '../screen/MyFriends_screen.dart';
+//import 'dart:io';
+//import 'dart:ui';
+//import '../screen/AddFriend_screen.dart';
+//import 'package:flutter/cupertino.dart';
+//import 'package:image_cropper/image_cropper.dart';
+//import '../screen/Wall_screen.dart';
+//import '../screen/WritingArticle_screen.dart';
+//import '../screen/Register_screen.dart';
+//import 'package:flutter/services.dart';
+//import '../constant/textStyle.dart';
+//import 'package:flutter/material.dart';
+//import 'package:google_fonts/google_fonts.dart';
+//import '../widget/LinkBall_widget.dart';
+//import 'package:image_picker/image_picker.dart';
+//import '../screen/MyFriends_screen.dart';
+//import 'package:hive/hive.dart';
+//import '../model/Person_model.dart';
+
+import '../MyLibrary/import_file.dart';
 
 class Menu extends StatefulWidget
 {
@@ -25,6 +29,15 @@ class Menu extends StatefulWidget
 class _MenuState extends State<Menu> {
   File _imageFile;
   final ImagePicker _picker = ImagePicker();
+  Box<Person> _boxPerson = Hive.box<Person>(GlobalPersonBoxLog);
+
+  void _logOut(BuildContext context) async
+  {
+    final Person person = _boxPerson.get(0);
+    await LogOutController.logout(person);
+    _boxPerson.delete(0);
+    Navigator.pushNamed(context, LogIn.route);
+  }
 
   void _getImage() async
   {
@@ -128,7 +141,9 @@ class _MenuState extends State<Menu> {
                     ),
                     LinkBall(
                       title: "Log Out",
-                      onTap: (){},
+                      onTap: (){
+                        _logOut(context);
+                      },
                     ),
                   ],
                 ),

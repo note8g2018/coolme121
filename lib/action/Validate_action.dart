@@ -1,4 +1,5 @@
-import 'package:email_validator/email_validator.dart';
+//import 'package:email_validator/email_validator.dart';
+import '../MyLibrary/import_file.dart';
 
 class ValidateDate
 {
@@ -19,6 +20,14 @@ class ValidateDate
     const String pattern = r'^([a-zA-Z0-9!@#$%^&*()_+=-]{8,31}$)';
     final RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(passWord1))
+      return false;
+    else
+      return true;
+  }
+
+  static bool passWord2(String passWord1, String passWord2)
+  {
+    if (passWord1 != passWord2)
       return false;
     else
       return true;

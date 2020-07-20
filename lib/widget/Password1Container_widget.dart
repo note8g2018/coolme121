@@ -1,15 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../constant/textStyle.dart';
-import 'package:flutter/services.dart';
+//import 'package:flutter/material.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:google_fonts/google_fonts.dart';
+//import '../constant/textStyle.dart';
+//import 'package:flutter/services.dart';
+
+import '../MyLibrary/import_file.dart';
 
 class Password1Container extends StatelessWidget
 {
 
   final Function onPressedNext;
   final Function onPressedBack;
-  const Password1Container({this.onPressedNext, this.onPressedBack});
+  final TextEditingController textEditingController;
+  const Password1Container({this.onPressedNext, this.onPressedBack,this.textEditingController});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +34,7 @@ class Password1Container extends StatelessWidget
         shrinkWrap: true,
         children: <Widget>[
           TextFormField(
+            controller: textEditingController,
             obscureText: true,
             inputFormatters: [
               WhitelistingTextInputFormatter(RegExp('[a-zA-Z0-9!@#\$%^&*()_+=-]')),

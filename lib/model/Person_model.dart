@@ -1,9 +1,31 @@
-import 'dart:convert';
-import 'package:mongo_dart/mongo_dart.dart' as mongo;
+//import 'dart:convert';
+import 'package:mongo_dart/mongo_dart.dart';
 import 'package:meta/meta.dart';
+import 'package:hive/hive.dart';
+//import 'package:hive_flutter/hive_flutter.dart';
 
-class Person
+part 'Person_model.g.dart';
+
+@HiveType()
+class Person extends HiveObject
 {
+  @HiveField(0)
+  final String id;
+  @HiveField(1)
+  final String userName;
+  @HiveField(2)
+  final String email;
+  @HiveField(3)
+  String passWord;
+  @HiveField(4)
+  bool isLogin;
+  @HiveField(5)
+  bool result;
+  @HiveField(6)
+  String method;
+  @HiveField(7)
+  String desc;
+
   Person({
     @required this.userName,
     @required this.email,
@@ -17,18 +39,18 @@ class Person
 
   factory Person.fromJson(dynamic jsonObj)
   {
-    mongo.ObjectId id;
+    String id;
     if(jsonObj["_id"] == null)
     {
       id = null;
     }
     else if(jsonObj["_id"].runtimeType == String)
     {
-      id = mongo.ObjectId.fromHexString(jsonObj["_id"] as String);
+      id = jsonObj["_id"] as String;
     }
     else
     {
-      id = jsonObj["_id"] as mongo.ObjectId;
+      id = (jsonObj["_id"] as ObjectId).toHexString();
     }
     return Person(
       id: id,
@@ -43,15 +65,6 @@ class Person
       desc: jsonObj["desc"] as String,
     );
   }
-
-  final mongo.ObjectId id;
-  final String userName;
-  final String email;
-  String passWord;
-  bool isLogin;
-  bool result;
-  String method;
-  String desc;
 
   Map<String, dynamic> toJson()
   {
