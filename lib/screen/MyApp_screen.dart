@@ -41,13 +41,14 @@ class MyApp extends StatelessWidget
         ),
 
         title: 'CoolME',
-        initialRoute: LogIn.route,
+        initialRoute: Wall2.route,
         routes:
         {
           LogIn.route: (context) => LogIn(),
           Register.route: (context) => Register(),
           WritingArticle.route: (context) => WritingArticle(),
           Wall.route: (context) => Wall(),
+          Wall2.route: (context) => Wall2(),
           Menu.route: (context) => Menu(),
           AddFriend.route: (context) => AddFriend(),
           MyFriends.route: (context) => MyFriends(),

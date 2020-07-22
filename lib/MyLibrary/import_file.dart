@@ -1,13 +1,20 @@
 library import_file;
 
 export '../main.dart';
+
 export '../action/Validate_action.dart';
+
 export '../constant/textStyle.dart';
+
 export '../controller/Login_controller.dart';
 export '../controller/LogOut_controller.dart';
 export '../controller/Registration_controller.dart';
+export '../controller/Article_controller.dart';
+
 export '../model/Person_model.dart';
 export '../model/TravelMessage_model.dart';
+export '../model/Article_model.dart';
+
 export '../screen/AddFriend_screen.dart';
 export '../screen/LogIn_screen.dart';
 export '../screen/Menu_screen.dart';
@@ -15,7 +22,9 @@ export '../screen/MyApp_screen.dart';
 export '../screen/MyFriends_screen.dart';
 export '../screen/Register_screen.dart';
 export '../screen/Wall_screen.dart';
+export '../screen/Wall2_screen.dart';
 export '../screen/WritingArticle_screen.dart';
+
 export '../widget/EmailContainer_widget.dart';
 export '../widget/LinkBall_widget.dart';
 export '../widget/Password1Container_widget.dart';

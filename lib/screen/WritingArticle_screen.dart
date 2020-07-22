@@ -5,9 +5,58 @@
 
 import '../MyLibrary/import_file.dart';
 
-class WritingArticle extends StatelessWidget
+class WritingArticle extends StatefulWidget
 {
   static String route = 'WritingArticle';
+
+  @override
+  _WritingArticleState createState() => _WritingArticleState();
+}
+
+class _WritingArticleState extends State<WritingArticle>
+{
+  Box<Person> _boxPerson = Hive.box<Person>(GlobalPersonBoxLog);
+  TextEditingController _titleController;
+  TextEditingController _bodyController;
+
+  _sendArticle(BuildContext context) async
+  {
+    if(_titleController.text.trim().isNotEmpty && _bodyController.text.trim().isNotEmpty)
+    {
+      final Article _article = Article(
+        title: _titleController.text.trim(),
+        body: _bodyController.text.trim(),
+        author: _boxPerson
+            .get(0)
+            .userName,
+        isPublic: true,
+      );
+      bool result = await ArticleController.send(article: _article);
+      if(result)
+        {
+          Navigator.pushNamed(context, Wall.route);
+        }
+    }
+  }
+
+  @override
+  void initState()
+  {
+    // TODO: implement initState
+    super.initState();
+    _titleController = TextEditingController();
+    _bodyController = TextEditingController();
+  }
+
+  @override
+  void dispose() async
+  {
+    _titleController.dispose();
+    _bodyController.dispose();
+    await _boxPerson.compact();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +96,7 @@ class WritingArticle extends StatelessWidget
                 margin: EdgeInsets.zero,
                 padding: EdgeInsets.all(10.0),
                 child: TextFormField(
+                  controller: _titleController,
                   //textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   style: GoogleFonts.openSans(
@@ -79,6 +129,7 @@ class WritingArticle extends StatelessWidget
                     bottom: 0.0,
                   ),
                   child: TextFormField(
+                    controller: _bodyController,
                     scrollPadding: EdgeInsets.zero,
                     textAlignVertical: TextAlignVertical.top,
                     keyboardType: TextInputType.multiline,
@@ -111,7 +162,9 @@ class WritingArticle extends StatelessWidget
                 margin: EdgeInsets.zero,
                 padding: EdgeInsets.zero,
                 child: FlatButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _sendArticle(context);
+                  },
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   padding: EdgeInsets.all(0.0),
                   color: Colors.green,
