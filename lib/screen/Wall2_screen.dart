@@ -43,7 +43,11 @@ class _Wall2State extends State<Wall2>
     _streamController.add(jsonDecode(response.body));
     _stream.listen((event) {
       print(event);
-    });
+    },
+      onDone: (){
+      print("Done");
+      }
+    );
 
   }
 
