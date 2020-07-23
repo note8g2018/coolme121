@@ -37,6 +37,7 @@ dependencies:
   email_validator:
   path_provider:
   hive: 1.2.0
+  http: any
 
 dev_dependencies:
   flutter_test:

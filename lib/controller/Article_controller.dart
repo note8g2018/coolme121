@@ -13,7 +13,8 @@ abstract class ArticleController
     option.baseUrl = url;
     option.contentType = DIO.Headers.jsonContentType;
     option.method = 'POST';
-    option.data = jsonEncode(article.toJson());
+//    var kk = article.toJson();
+    option.data = jsonEncode(article);
     DIO.Dio dio = DIO.Dio();
     DIO.Response response;
     try{

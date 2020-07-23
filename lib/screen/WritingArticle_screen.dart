@@ -30,6 +30,7 @@ class _WritingArticleState extends State<WritingArticle>
             .get(0)
             .userName,
         isPublic: true,
+        writingTimeUTC: DateTime.now().toUtc(),
       );
       bool result = await ArticleController.send(article: _article);
       if(result)

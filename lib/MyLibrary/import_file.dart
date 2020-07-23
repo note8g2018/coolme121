@@ -37,9 +37,11 @@ export 'package:flutter/cupertino.dart' hide RefreshCallback;
 
 export 'dart:io';
 export 'dart:convert';
+export 'dart:async';
 export 'package:meta/meta.dart';
 export 'package:vector_math/vector_math.dart' hide Colors, Matrix4;
 
+export 'package:http/http.dart';
 export 'package:hive/hive.dart';
 export 'package:path_provider/path_provider.dart';
 export 'package:email_validator/email_validator.dart';
@@ -47,7 +49,7 @@ export 'package:google_fonts/google_fonts.dart';
 export 'package:image_picker/image_picker.dart';
 export 'package:image_cropper/image_cropper.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
-export 'package:dio/dio.dart' hide VoidCallback;
+export 'package:dio/dio.dart' hide VoidCallback, Response, MultipartFile;
 export 'package:mongo_dart/mongo_dart.dart' hide State, Accumulator, Size,
 Builder, Switch;
 

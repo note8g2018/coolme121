@@ -5,20 +5,20 @@ class Article
   String title;
   String body;
   String author;
-  DateTime writeTimeUTC;
+  DateTime writingTimeUTC;
   bool isPublic;
   
   Article({
     this.title,
     this.body,
     this.author,
-    this.writeTimeUTC,
+    this.writingTimeUTC,
     this.isPublic,
 });
 
   factory Article.fromJson(dynamic jsonObj)
   {
-//    DateTime _dateTime;
+ //   DateTime _dateTime = DateTime;
 //    if(jsonObj["writeTimeUTC"] == null)
 //      {
 //        _dateTime = null;
@@ -31,8 +31,11 @@ class Article
       title: jsonObj["title"] as String,
       body: jsonObj["body"] as String,
       author: jsonObj["author"] as String,
-      writeTimeUTC: jsonObj["writeTimeUTC"] as DateTime,
+      //writeTimeUTC: jsonObj["writeTimeUTC"] as DateTime,
       isPublic: jsonObj["isPublic"] as bool,
+//      writingTimeUTC: DateTime
+//          .fromMillisecondsSinceEpoch(jsonObj["writeTimeUTC"] as int, isUtc: true),
+        writingTimeUTC: DateTime.parse(jsonObj["writingTimeUTC"] as String),
     );
   }
 
@@ -42,8 +45,8 @@ class Article
       "title": title,
       "body": body,
       "author": author,
-      "writeTimeUTC": writeTimeUTC?.toUtc(),
       "isPublic": isPublic,
+      "writingTimeUTC": writingTimeUTC?.toUtc()?.toString(),
     };
   }
 }
