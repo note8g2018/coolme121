@@ -156,8 +156,8 @@ class _RegisterState extends State<Register> with TickerProviderStateMixin
       return false;
     }else
     {
-      Person personAccount = await LoginController.loginPerson(jsonObj: jsonOdj);
-      _boxPerson.put(0, personAccount);
+      Person person = await LoginController.loginPerson(jsonObj: jsonOdj);
+      _boxPerson.put(0, person);
       Navigator.pushNamed(context, Menu.route);
     }
   }

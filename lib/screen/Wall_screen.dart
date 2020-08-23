@@ -23,6 +23,19 @@ class _WallState extends State<Wall>
   int distance;
   ScrollController _scrollController;
 
+  void jumpToBottom2() {
+//    _scrollController.jumpTo(_size.height);
+
+    int currentPosition = _scrollController.offset.toInt();
+    int distance = _scrollController.position.maxScrollExtent.toInt()
+        - currentPosition;
+    time = distance ~/speed;
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: time),
+      curve: Curves.linear,
+    );
+  }
 
   void jumpToBottom() {
 //    _scrollController.jumpTo(_size.height);

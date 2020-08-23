@@ -4,18 +4,23 @@ import 'package:dio/dio.dart' as DIO;
 
 abstract class Registration
 {
+  //const String url = 'http://coolme.me:8888';
+  //const String url = 'http://192.168.1.100:8888';
+  //const String url = 'localhost:3000';
+  static const String url = 'http://192.168.1.100:3000';
+
   static Future<TravelMessage> CheckUserName({Map<String, dynamic> jsonObj})
   async {
     TravelMessage travelMessage = TravelMessage();
-    //const String url = 'http://coolme.me:8888';
-    const String url = 'http://192.168.1.100:8888';
     DIO.RequestOptions option = DIO.RequestOptions();
-    option.responseType = DIO.ResponseType.json;
+//    option.responseType = DIO.ResponseType.json;
 //    option.connectTimeout = 5000;
     option.baseUrl = url;
-    option.contentType = DIO.Headers.jsonContentType;
+//    option.contentType = DIO.Headers.jsonContentType;
     option.method = 'POST';
-    option.data = jsonEncode(jsonObj);
+    print(jsonObj);
+    option.data = jsonObj;
+//    option.data = jsonEncode(jsonObj);
     DIO.Dio dio = DIO.Dio();
     DIO.Response response;
     try{
@@ -30,7 +35,8 @@ abstract class Registration
     }
     if (response.statusCode == 200)
     {
-      final Map<String, dynamic> data = jsonDecode(response.data);
+      final Map<String, dynamic> data = response.data;
+      //final Map<String, dynamic> data = jsonDecode(response.data);
       //final TravelMessage travelMessage = TravelMessage.fromJson(response.data);
       travelMessage.result = data["result"] as bool;
       travelMessage.description = data["description"] as String;
@@ -47,15 +53,14 @@ abstract class Registration
   static Future<TravelMessage> CheckEmail({Map<String, dynamic> jsonObj})
   async {
     TravelMessage travelMessage = TravelMessage();
-    //const String url = 'http://coolme.me:8888';
-    const String url = 'http://192.168.1.100:8888';
     DIO.RequestOptions option = DIO.RequestOptions();
-    option.responseType = DIO.ResponseType.json;
+//    option.responseType = DIO.ResponseType.json;
 //    option.connectTimeout = 5000;
     option.baseUrl = url;
-    option.contentType = DIO.Headers.jsonContentType;
+//    option.contentType = DIO.Headers.jsonContentType;
     option.method = 'POST';
-    option.data = jsonEncode(jsonObj);
+    option.data = jsonObj;
+//    option.data = jsonEncode(jsonObj);
     DIO.Dio dio = DIO.Dio();
     DIO.Response response;
     try{
@@ -70,7 +75,8 @@ abstract class Registration
     }
     if (response.statusCode == 200)
     {
-      final Map<String, dynamic> data = jsonDecode(response.data);
+      final Map<String, dynamic> data = response.data;
+//      final Map<String, dynamic> data = jsonDecode(response.data);
       //final TravelMessage travelMessage = TravelMessage.fromJson(response.data);
       travelMessage.result = data["result"] as bool;
       travelMessage.description = data["description"] as String;
@@ -87,15 +93,13 @@ abstract class Registration
   static Future<TravelMessage> register({Map<String, dynamic> jsonObj})
   async {
     TravelMessage travelMessage = TravelMessage();
-    //const String url = 'http://coolme.me:8888';
-    const String url = 'http://192.168.1.100:8888';
     DIO.RequestOptions option = DIO.RequestOptions();
-    option.responseType = DIO.ResponseType.json;
+//    option.responseType = DIO.ResponseType.json;
 //    option.connectTimeout = 5000;
     option.baseUrl = url;
-    option.contentType = DIO.Headers.jsonContentType;
+//    option.contentType = DIO.Headers.jsonContentType;
     option.method = 'POST';
-    option.data = jsonEncode(jsonObj);
+    option.data = jsonObj;
     DIO.Dio dio = DIO.Dio();
     DIO.Response response;
     try{
@@ -110,8 +114,8 @@ abstract class Registration
     }
     if (response.statusCode == 200)
     {
-      final Map<String, dynamic> data = jsonDecode(response.data);
-      //final TravelMessage travelMessage = TravelMessage.fromJson(response.data);
+      final Map<String, dynamic> data = response.data;
+        //final TravelMessage travelMessage = TravelMessage.fromJson(response.data);
       travelMessage.result = data["result"] as bool;
       travelMessage.description = data["description"] as String;
       return travelMessage;

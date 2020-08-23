@@ -51,16 +51,16 @@ class _LogInState extends State<LogIn> {
       "userName": _userName,
       "passWord": _passWord,
     };
-    TravelMessage travelMessage = await LoginController.login(jsonObj: jsonOdj);
-    if(!travelMessage.result)
+    Person person = await LoginController.loginPerson(jsonObj: jsonOdj);
+    if(!person.isLogin)
     {
-      _showSnackBar(travelMessage.description, context);
+      _showSnackBar('The userName or passWord or Both are not correct', context);
       return false;
-    }else
+    }
+    else
     {
-      Person personAccount = await LoginController.loginPerson(jsonObj: jsonOdj);
-      _boxPerson.put(0, personAccount);
-      Navigator.pushNamed(context, Wall.route);
+      _boxPerson.put(0, person);
+      Navigator.pushNamed(context, Wall3.route);
     }
   }
 
@@ -71,7 +71,7 @@ class _LogInState extends State<LogIn> {
       {
         if(person.isLogin)
           {
-            Navigator.pushNamed(context, Wall.route);
+            Navigator.pushNamed(context, Wall3.route);
           }
       }
   }

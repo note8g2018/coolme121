@@ -1,15 +1,4 @@
-//import '../screen/WritingArticle_screen.dart';
-//import 'package:flutter/material.dart';
-//import '../screen/LogIn_screen.dart';
-//import 'package:flutter/services.dart';
-//import '../screen/Menu_screen.dart';
-//import '../screen/Register_screen.dart';
-//import '../screen/Wall_screen.dart';
-//import '../screen/AddFriend_screen.dart';
-//import '../screen/MyFriends_screen.dart';
-
 import '../MyLibrary/import_file.dart';
-
 
 class MyApp extends StatelessWidget
 {
@@ -41,7 +30,7 @@ class MyApp extends StatelessWidget
         ),
 
         title: 'CoolME',
-        initialRoute: Wall2.route,
+        initialRoute: LogIn.route,
         routes:
         {
           LogIn.route: (context) => LogIn(),
@@ -49,6 +38,7 @@ class MyApp extends StatelessWidget
           WritingArticle.route: (context) => WritingArticle(),
           Wall.route: (context) => Wall(),
           Wall2.route: (context) => Wall2(),
+          Wall3.route: (context) => Wall3(),
           Menu.route: (context) => Menu(),
           AddFriend.route: (context) => AddFriend(),
           MyFriends.route: (context) => MyFriends(),

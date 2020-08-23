@@ -36,14 +36,19 @@ dependencies:
   dio:
   email_validator:
   path_provider:
-  hive: 1.2.0
-  http: any
+  hive:
+  http:
+  web_socket_channel:
+#  intl:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   hive_generator:
   build_runner:
+
+dependency_overrides:
+  analyzer: 0.39.14
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

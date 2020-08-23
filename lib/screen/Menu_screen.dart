@@ -124,7 +124,7 @@ class _MenuState extends State<Menu> {
                     LinkBall(
                       title: "Wall",
                       onTap: (){
-                        Navigator.pushNamed(context, Wall.route);
+                        Navigator.pushNamed(context, Wall3.route);
                       },
                     ),
                     LinkBall(

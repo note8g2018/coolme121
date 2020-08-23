@@ -8,10 +8,13 @@ part of 'Person_model.dart';
 
 class PersonAdapter extends TypeAdapter<Person> {
   @override
+  final int typeId = 0;
+
+  @override
   Person read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Person(
       userName: fields[1] as String,
@@ -19,16 +22,15 @@ class PersonAdapter extends TypeAdapter<Person> {
       id: fields[0] as String,
       passWord: fields[3] as String,
       isLogin: fields[4] as bool,
-      result: fields[5] as bool,
-      method: fields[6] as String,
-      desc: fields[7] as String,
+      regTimeUTC: fields[5] as DateTime,
+      lastTimeLoginUTC: fields[6] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, Person obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -40,10 +42,18 @@ class PersonAdapter extends TypeAdapter<Person> {
       ..writeByte(4)
       ..write(obj.isLogin)
       ..writeByte(5)
-      ..write(obj.result)
+      ..write(obj.regTimeUTC)
       ..writeByte(6)
-      ..write(obj.method)
-      ..writeByte(7)
-      ..write(obj.desc);
+      ..write(obj.lastTimeLoginUTC);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PersonAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

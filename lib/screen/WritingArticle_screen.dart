@@ -3,6 +3,8 @@
 //import '../constant/textStyle.dart';
 //import '../screen/Menu_screen.dart';
 
+import 'dart:ffi';
+
 import '../MyLibrary/import_file.dart';
 
 class WritingArticle extends StatefulWidget
@@ -35,7 +37,15 @@ class _WritingArticleState extends State<WritingArticle>
       bool result = await ArticleController.send(article: _article);
       if(result)
         {
-          Navigator.pushNamed(context, Wall.route);
+          //Navigator.pushNamed(context, Wall3.route,arguments: _article);
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Wall3(article: _article,),
+          ),
+        );
+          //await Future.delayed(const Duration(milliseconds: 1450));
+          //Navigator.pushReplacementNamed(context, Wall3.route);
         }
     }
   }
@@ -49,12 +59,17 @@ class _WritingArticleState extends State<WritingArticle>
     _bodyController = TextEditingController();
   }
 
-  @override
-  void dispose() async
+  Future<void> myDispose() async
   {
     _titleController.dispose();
     _bodyController.dispose();
     await _boxPerson.compact();
+  }
+
+  @override
+  void dispose() async
+  {
+    myDispose();
     // TODO: implement dispose
     super.dispose();
   }
